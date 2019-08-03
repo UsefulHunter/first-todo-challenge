@@ -1,26 +1,54 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header';
+import Options from './components/Options';
+import AddOption from './components/AddOption';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class FirstTodo extends React.Component {
+  state = {
+    options: []
+  };
+
+  handleAddTodo = option => {
+    if (!option) {
+      return 'Valor inserido não é valido';
+    } else if (this.state.options.indexOf(option) > -1) {
+      return 'Saporra já existe, marreco';
+    }
+
+    this.setState(prevState => ({
+      options: prevState.options.concat(option)
+    }));
+  };
+
+  handleDeleteOption = optionToRemove => {
+    this.setState(prevState => ({
+      options: prevState.options.filter(option => optionToRemove !== option)
+    }));
+  };
+
+  render() {
+    const subtitle = 'Essa daqui vai pra tu, meu bom! VRAU';
+    return (
+      <div>
+        <Header subtitle={subtitle} />
+        <section>
+          <div>
+            <p>Aqui deveriam ir minhas opções</p>
+            <Options
+              options={this.state.options}
+              handleDeleteOptions={this.handleDeleteOptions}
+              handleDeleteOption={this.handleDeleteOption}
+            />
+            <AddOption handleAddTodo={this.handleAddTodo} />
+          </div>
+        </section>
+      </div>
+    );
+  }
 }
 
-export default App;
+FirstTodo.defaultProps = {
+  options: []
+};
+
+export default FirstTodo;
